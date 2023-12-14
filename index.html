@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Page</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #00FFFF;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Изменили на center для выравнивания по центру */
+            height: 100vh;
+        }
+
+        #terminal {
+            width: 80%;
+            max-width: 600px;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #FFFF00;
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+			text-align: center;
+        }
+    </style>
+</head>
+<body>
+	<input id="input" placeholder="Type a command and press Enter" onkeydown="handleKeyPress(event)">
+    <div id="terminal">
+    </div>
+    
+    <script>
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('input');
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                executeCommand(input.value.trim());
+                input.value = '';
+            }
+        }
+
+        function executeCommand(command) {
+            const currentDate = new Date();
+            let output = '';
+
+            switch (command) {
+                case '/time':
+                    output = `Current time: ${currentDate.toLocaleTimeString()}`;
+                    break;
+                case '/date':
+                    output = `Current date: ${currentDate.toLocaleDateString()}`;
+                    break;
+                case '/url':
+                    output = `Current URL: ${window.location.href}`;
+                    break;
+                case '/help':
+                    output = `Available commands: /time, /date, /url, /help, /clear, /echo [text], /random, /about, /contact, /exit`;
+                    break;
+                case '/clear':
+                    terminal.textContent = '';
+                    break;
+                case '/echo':
+                    output = 'Please provide text for /echo command.';
+                    break;
+                case '/random':
+                    output = `Random number: ${Math.floor(Math.random() * 100)}`;
+                    break;
+                case '/about':
+                    output = 'Simple Terminal Page\nVersion 1.0\nCreated by pafranksvoau';
+                    break;
+                case '/contact':
+                    output = 'Contact: your.email@example.com\nTwitter https://twitter.com/LebedevRoman6';
+                    break;
+                case '/exit':
+                    window.close(); 
+                    break;
+                default:
+                    if (command.startsWith('/echo ')) {
+                        output = `Echo: ${command.substring(6)}`;
+                    } else {
+                        output = `Unknown command: ${command}`;
+                    }
+            }
+
+            appendToTerminal(output);
+        }
+
+        function appendToTerminal(text) {
+            terminal.innerHTML += `<div style="color: #00FFFF;">${text}</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    </script>
+</body>
+</html>
